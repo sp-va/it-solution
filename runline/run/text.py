@@ -2,15 +2,13 @@ from PIL import Image
 from moviepy.editor import *
 
 
-def video_maker(input_txt):
+def video_maker(txt):
     pic = Image.new('RGB', (100, 100), 'green')
     pic.save('my_image.png')
     image = ['my_image.png', ]
     clip = [ImageClip(m).set_duration(3) for m in image]
     concatenated = concatenate_videoclips(clip, method='compose')
     concatenated.write_videofile('my_video.mp4', fps=30)
-
-    txt = input_txt
 
     w = 100
     h = 50
