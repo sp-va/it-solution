@@ -1,9 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import InputTextForLine
 from django.views.decorators.csrf import csrf_exempt
-#from .text import video_maker
-
-
+from .video_maker import video_maker
 
 
 
@@ -12,10 +11,12 @@ def create_video(request):
     if request.method == 'POST':
         form = InputTextForLine(request.POST)
         if form.is_valid():
-            #video_maker('234')
+            video_maker(form.cleaned_data['text'])
             form.save()
-            return redirect('create_video')
-
+            with open('./static/run/output_video.avi', 'rb') as out:
+                response = HttpResponse(out.read(), content_type='video/avi')
+                response['Content-Disposistion'] = 'attachment; filename=output_video.avi'
+                return response
     else:
         form = InputTextForLine()
 
@@ -25,3 +26,4 @@ def create_video(request):
         {"form": form,
          }
     )
+
